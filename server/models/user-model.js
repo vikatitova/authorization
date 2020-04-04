@@ -1,16 +1,15 @@
-import { Schema , model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({
-    name:{
+    name: {
         type: String,
         trim: true,
-        required:true
+        required: true,
     },
-    age:{
+    age: {
         type: Number,
         required: true,
-        trim: true
-    }
+    },
 });
 
-export default model('UserModel',userSchema);
+export default model('UserModel', userSchema);

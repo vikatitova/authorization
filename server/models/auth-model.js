@@ -1,21 +1,21 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types } from 'mongoose';
 
-const userSchema = new Schema({
+const customerSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required:true
+        required: true,
     },
     manageUsers: [
         {
             type: Types.ObjectId,
-            ref: "UserModel"
-        }
-    ]
+            ref: 'UserModel',
+        },
+    ],
 });
 
-export default model("AuthModel", userSchema);
+export default model('AuthModel', customerSchema);

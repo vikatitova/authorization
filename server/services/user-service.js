@@ -1,75 +1,72 @@
-
-import UserModel from "../models/user-model";
-import AuthModel from "../models/auth-model";
-
+import UserModel from '../models/user-model';
+import AuthModel from '../models/auth-model';
 
 module.exports = class UserService {
-
-    getUsers = async (req) =>{ 
+    getUsers = async (customerId) => {
         let users = [];
-        const userAuth = await AuthModel.findById(req.user.userId);
-        const userArrId = userAuth.manageUsers;
+        const userAuth = await AuthModel.findById(customerId);
+        const usersArrId = userAuth.manageUsers;
 
         for (let userId of usersArrId) {
             const user = await UserModel.findById(userId);
             users.push(user);
         }
 
-        return users.reduce((acc,user) =>{
-            return [ ...acc,
-            {
-                id: user._id,
-                name: user.name,
-                age:user.age
-            }
-        ];
+        return users.reduce((acc, user) => {
+            return [
+                ...acc,
+                {
+                    id: user._id,
+                    name: user.name,
+                    age: user.age,
+                },
+            ];
         }, []);
     };
 
-    getUser = async (req) => {
-        const user = await UserModel.findById(req.params.id) ;
-       return {
-           name: user.name,
-           age: user.age,
-           id: user._id
-       };
-    };
-
-    addUser = async (req) =>{
-        const userAuth = await AuthModel.findById(req.user.userId);
-        const user = await UserModel.create(req.body);
-        userAuth.manageUsers.push(user);
-        userAuth.save();
+    getUser = async (id) => {
+        const user = await UserModel.findById(id);
         return {
-            name:user.name,
-            age:user.age,
-            id: user._id
+            name: user.name,
+            age: user.age,
+            id: user._id,
         };
     };
 
-    deleteUser = async (req) => {
+    addUser = async ({ body, customerId }) => {
+        const userAuth = await AuthModel.findById(customerId);
+        console.log(userAuth);
+        const user = await UserModel.create(body);
+        userAuth.manageUsers.push(user);
+        userAuth.save();
+        return {
+            name: user.name,
+            age: user.age,
+            id: user._id,
+        };
+    };
+
+    deleteUser = async (id) => {
         await AuthModel.findOneAndUpdate(
             {},
-            { $pull: { manageUsers:req.params.id }},
+            { $pull: { manageUsers: id } },
             { useFindAndModify: false }
-            );
-            await UserModel.deleteOne({ _id: req.params.id });
-            return req;
+        );
+        await UserModel.deleteOne({ _id: id });
+        return req;
     };
-    
 
-    editUser = async (req) =>{
+    editUser = async (body) => {
         await UserModel.findByIdAndUpdate(
-            { _id: req.body.id },
+            { _id: body.id },
             {
-                name:req.body.name,
-                age: req.body.age
+                name: body.name,
+                age: body.age,
             },
             {
-                useFindAndModify: false
+                useFindAndModify: false,
             }
         );
-        return req.body;
+        return body;
     };
-
-}
+};

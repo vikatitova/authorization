@@ -2,25 +2,26 @@ const AuthService = require('../services/auth-service');
 const instanceAuthService = new AuthService();
 
 class AuthController {
+    signup = async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            await instanceAuthService.signup({ email, password });
+            res.status(201).send({ message: 'user was created' });
+        } catch (err) {
+            res.status(500).send({ message: err.message });
+        }
+    };
     login = async (req, res) => {
-          try{
-           const data = await instanceAuthService.login(req, res);
-           res.status(201).send({...data, message: "successfully logged in"}); 
-            } catch (err){
-                res.status(500).send({ message: err.message});
-
-            }
-    
-    }
-    signup = async (req,res) =>{
-            try{
-                await instanceAuthService.signup(req, res);
-                res.status(201).send({ message: "user was created"});
-            }
-            catch(err) {
-                res.status(500).send({ message: err.message});
-            }
-     
+        try {
+            const { email, password } = req.body;
+            const data = await instanceAuthService.login({ email, password });
+            res.status(201).send({
+                ...data,
+                message: 'successfully logged in',
+            });
+        } catch (err) {
+            res.status(500).send({ message: err.message });
+        }
     };
 }
 
