@@ -65,9 +65,16 @@ class ManageUsers {
             logout();
         }
 
-        this.updateUsersNumber(users, 'createUser');
+        if (response.status === 400) {
+            this.notify(user.message);
+        } else {
+            this.updateUsersNumber(users, 'createUser');
 
-        this.tbody.insertAdjacentHTML('beforeend', this.createTableRow(user));
+            this.tbody.insertAdjacentHTML(
+                'beforeend',
+                this.createTableRow(user)
+            );
+        }
     }
 
     async deleteUser(id) {
@@ -131,9 +138,13 @@ class ManageUsers {
             logout();
         }
 
-        const tr = document.querySelector(`tr[data-rowid="${user.id}"]`);
-        tr.insertAdjacentHTML('beforebegin', this.createTableRow(user));
-        tr.remove();
+        if (response.status === 400) {
+            this.notify(user.message);
+        } else {
+            const tr = document.querySelector(`tr[data-rowid="${user.id}"]`);
+            tr.insertAdjacentHTML('beforebegin', this.createTableRow(user));
+            tr.remove();
+        }
     }
 
     eventHandler = (e) => {
@@ -174,6 +185,19 @@ class ManageUsers {
             </tr>
         `;
     }
+
+    notify = (message) => {
+        Toastify({
+            text: `${message}`,
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',
+            stopOnFocus: true,
+        }).showToast();
+    };
 }
 
 const forms = document.querySelectorAll('form');

@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 
-const validationCustomerSchema = Joi.object({
+const validationAuthSchema = Joi.object({
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,30}$')),
 
     email: Joi.string().email({
@@ -9,4 +9,4 @@ const validationCustomerSchema = Joi.object({
     }),
 });
 
-module.exports = validationCustomerSchema;
+module.exports = validationAuthSchema;

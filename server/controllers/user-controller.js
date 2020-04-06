@@ -4,9 +4,8 @@ const instanceUserService = new UserService();
 module.exports = class UserController {
     getUsers = async (req, res) => {
         try {
-            const { customerId } = req.customerTokenDetails;
-            console.log(customerId);
-            const data = await instanceUserService.getUsers(customerId);
+            const { customer } = req;
+            const data = await instanceUserService.getUsers(customer);
             return res.status(200).send(data);
         } catch (err) {
             console.log('Error', err);
@@ -25,14 +24,11 @@ module.exports = class UserController {
     };
 
     addUser = async (req, res) => {
-        const {
-            body,
-            customerTokenDetails: { customerId },
-        } = req;
+        const { body, customer } = req;
         try {
             const data = await instanceUserService.addUser({
                 body,
-                customerId,
+                customer,
             });
             return res.status(200).send(data);
         } catch (err) {

@@ -1,19 +1,19 @@
 const express = require('express');
 const router = new express.Router();
-const validationCustomerMiddleware = require('../validation/validation-customer.middleware');
-const validationCustomerSchema = require('../validation/validation-customer.model');
+const validationMiddleware = require('../validation/validation.middleware');
+const validationAuthSchema = require('../validation/model/validation-auth.model');
 const AuthController = require('../controllers/auth-controller');
 const instanceAuthController = new AuthController();
 
 router.post(
     '/signup',
-    validationCustomerMiddleware(validationCustomerSchema),
+    validationMiddleware(validationAuthSchema),
     instanceAuthController.signup
 );
 
 router.post(
     '/login',
-    validationCustomerMiddleware(validationCustomerSchema),
+    validationMiddleware(validationAuthSchema),
     instanceAuthController.login
 );
 module.exports = router;

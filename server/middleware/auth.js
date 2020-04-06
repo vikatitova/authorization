@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { private_key } = require('../config');
 import AuthModel from '../models/auth-model';
+import UserModel from '../models/user-model';
 
 module.exports = async (req, res, next) => {
     try {
@@ -10,12 +11,17 @@ module.exports = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, private_key);
+        const customer = await AuthModel.findById(decoded.customerId);
 
-        const customerAuth = await AuthModel.findById(decoded.customerId);
-        if (!customerAuth) {
+        if (!customer) {
             throw new Error('Customer does not exist in db');
         }
-        req.customerTokenDetails = decoded;
+
+        customer.manageUsers = await UserModel.find({
+            _id: { $in: customer.manageUsers },
+        });
+
+        req.customer = customer;
         next();
     } catch (err) {
         console.log(err);

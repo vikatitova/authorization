@@ -2,17 +2,8 @@ import UserModel from '../models/user-model';
 import AuthModel from '../models/auth-model';
 
 module.exports = class UserService {
-    getUsers = async (customerId) => {
-        let users = [];
-        const userAuth = await AuthModel.findById(customerId);
-        const usersArrId = userAuth.manageUsers;
-
-        for (let userId of usersArrId) {
-            const user = await UserModel.findById(userId);
-            users.push(user);
-        }
-
-        return users.reduce((acc, user) => {
+    getUsers = async (customer) =>
+        customer.manageUsers.reduce((acc, user) => {
             return [
                 ...acc,
                 {
@@ -22,7 +13,6 @@ module.exports = class UserService {
                 },
             ];
         }, []);
-    };
 
     getUser = async (id) => {
         const user = await UserModel.findById(id);
@@ -33,16 +23,14 @@ module.exports = class UserService {
         };
     };
 
-    addUser = async ({ body, customerId }) => {
-        const userAuth = await AuthModel.findById(customerId);
-        console.log(userAuth);
+    addUser = async ({ body, customer }) => {
         const user = await UserModel.create(body);
-        userAuth.manageUsers.push(user);
-        userAuth.save();
+        customer.manageUsers.push(user);
+        customer.save();
         return {
+            id: user._id,
             name: user.name,
             age: user.age,
-            id: user._id,
         };
     };
 
