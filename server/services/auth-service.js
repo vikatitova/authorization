@@ -35,9 +35,6 @@ module.exports = class AuthService {
             expiresIn: '1h',
         });
 
-        return {
-            token,
-            customerId: customer._id,
-        };
+        return token;
     };
 };

@@ -14,9 +14,9 @@ class AuthController {
     login = async (req, res) => {
         try {
             const { email, password } = req.body;
-            const data = await instanceAuthService.login({ email, password });
+            const token = await instanceAuthService.login({ email, password });
             res.status(201).send({
-                ...data,
+                token,
                 message: 'successfully logged in',
             });
         } catch (err) {

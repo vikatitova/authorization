@@ -2,9 +2,14 @@ const jwt = require('jsonwebtoken');
 const { private_key } = require('../config');
 import AuthModel from '../models/auth-model';
 import UserModel from '../models/user-model';
+import { hostname, port } from '../config';
 
 module.exports = async (req, res, next) => {
     try {
+        if (!req.headers.authorization) {
+            return res.redirect(`http://${hostname}:${port}`);
+        }
+
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
             throw new Error('Wrong token on client');
