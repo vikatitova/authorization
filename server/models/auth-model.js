@@ -16,6 +16,9 @@ const customerSchema = new Schema({
             ref: 'UserModel',
         },
     ],
+    avatar_img: {
+        type: String,
+    },
 });
 
 export default model('AuthModel', customerSchema);

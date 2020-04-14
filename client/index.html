@@ -23,7 +23,15 @@
     <div class="container">
         <div class="logout-wrapper">
             <div>
-                <span class="material-icons">face</span>
+                <div id="avatar-wrapper">
+                    <form id="avatar" enctype="multipart/form-data">
+                        <input id="file-input" type="file" name="filedata" />
+                        <label for="file-input">
+                            <img id="selected-avatar" alt="Avatar">
+                        </label>
+                        <input type="submit" value="Send">
+                    </form>
+                </div>
                 <span id="customerEmail"></span>
             </div>
             <button class="btn btn-default" onClick="logout()">

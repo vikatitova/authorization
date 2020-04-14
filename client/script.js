@@ -147,6 +147,36 @@ class ManageUsers {
         }
     }
 
+    uploadAvatar = async (files) => {
+        const response = await fetch('/avatar', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: files,
+        });
+        const data = await response.json();
+
+        // If token has been expired
+        if (response.status === 401) {
+            logout();
+        }
+
+        const avatar = document.getElementById('avatar');
+        const selectedAvatar = document.getElementById('selected-avatar');
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            selectedAvatar.setAttribute('src', e.target.result);
+            selectedAvatar.style.cssText = `
+                height: 100px;
+                wigth: 100px;
+            `;
+        };
+
+        reader.readAsDataURL(avatar.elements.filedata.files[0]);
+    };
+
     eventHandler = (e) => {
         e.preventDefault();
         if (e.target.id === 'createUser') {
@@ -164,6 +194,10 @@ class ManageUsers {
         if (e.target.id === 'deleteUser') {
             const id = e.target.dataset.id;
             this.deleteUser(id);
+        }
+        if (e.target.id === 'avatar') {
+            const files = new FormData(e.target);
+            this.uploadAvatar(files);
         }
         $(`#${e.target.id}Modal`).modal('toggle');
     };
@@ -201,6 +235,7 @@ class ManageUsers {
 }
 
 const forms = document.querySelectorAll('form');
+const selectedAvatar = document.getElementById('selected-avatar');
 const users = new ManageUsers();
 
 document.addEventListener(
