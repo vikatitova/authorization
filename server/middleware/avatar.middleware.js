@@ -1,6 +1,6 @@
 const multer = require('multer');
 import { v4 as uuidv4 } from 'uuid';
-const path = 'avatars';
+const path = 'client/avatars';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

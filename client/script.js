@@ -32,13 +32,14 @@ class ManageUsers {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         });
-        const users = await response.json();
+        const { users, avatarPath } = await response.json();
 
         // If token has been expired
         if (response.status === 401) {
             logout();
         }
 
+        this.setSrcToAvatar(avatarPath);
         this.updateUsersNumber(users, 'getUsers');
 
         let tableRows = '';
@@ -162,19 +163,12 @@ class ManageUsers {
             logout();
         }
 
-        const avatar = document.getElementById('avatar');
+        this.setSrcToAvatar(data.path);
+    };
+
+    setSrcToAvatar = (path) => {
         const selectedAvatar = document.getElementById('selected-avatar');
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            selectedAvatar.setAttribute('src', e.target.result);
-            selectedAvatar.style.cssText = `
-                height: 100px;
-                wigth: 100px;
-            `;
-        };
-
-        reader.readAsDataURL(avatar.elements.filedata.files[0]);
+        selectedAvatar.src = path;
     };
 
     eventHandler = (e) => {

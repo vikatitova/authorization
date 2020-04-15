@@ -2,11 +2,12 @@ const UserService = require('../services/user-service');
 const instanceUserService = new UserService();
 
 module.exports = class UserController {
-    getUsers = async (req, res) => {
+    getUsers = (req, res) => {
         try {
             const { customer } = req;
-            const data = await instanceUserService.getUsers(customer);
-            return res.status(200).send(data);
+            const users = instanceUserService.getUsers(customer);
+            const avatarPath = instanceUserService.getAvatarPath(customer);
+            return res.status(200).send({ users, avatarPath });
         } catch (err) {
             console.log('Error', err);
             return res.status(500).send({ message: err.message });

@@ -2,8 +2,14 @@ import UserModel from '../models/user-model';
 import AuthModel from '../models/auth-model';
 
 module.exports = class UserService {
-    getUsers = async (customer) =>
-        customer.manageUsers.reduce((acc, user) => {
+    getAvatarPath = (customer) => {
+        if (customer.avatar_img) {
+            return `avatars/${customer.avatar_img}`;
+        }
+    };
+
+    getUsers = (customer) => {
+        return customer.manageUsers.reduce((acc, user) => {
             return [
                 ...acc,
                 {
@@ -13,6 +19,7 @@ module.exports = class UserService {
                 },
             ];
         }, []);
+    };
 
     getUser = async (id) => {
         const user = await UserModel.findById(id);

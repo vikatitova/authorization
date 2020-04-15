@@ -17,8 +17,8 @@ body {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .logout-wrapper div {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    display: flex;
+    justify-content: center;
 }
 .table-wrapper {
     background: #fff;
@@ -159,6 +159,24 @@ table.table .avatar {
 #avatar > input[type='file'] {
     display: none;
 }
+#avatar {
+    display: flex;
+    flex-direction: column;
+}
 #selected-avatar {
     cursor: pointer;
+    width: 100px;
+    border-radius: 10px;
+    min-height: 100px;
+    background-color: #eee;
+    padding: 10px;
+    transition: ease-in-out 0.2s;
+}
+#selected-avatar:hover {
+    background-color: #bbb;
+    transition: ease-in-out 0.2s;
+}
+#customerEmail {
+    font-size: 1.2rem;
+    text-align: center;
 }
